@@ -1,0 +1,7 @@
+{
+    email doglover.fourtwenty@gmail.com
+}
+
+cry9c.online {
+    reverse_proxy server:8000
+}
