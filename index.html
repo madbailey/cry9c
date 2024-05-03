@@ -1,44 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Cry9c Fan Club Chat!</title>
-  <script>
-    let socket;
-
-    function init() {
-      socket = new WebSocket("wss://cry9c.life/ws");
-
-      socket.onopen = function(event) {
-        console.log("Connected to server");
-      };
-
-      socket.onmessage = function(event) {
-        const message = event.data;
-        const chatHistory = document.getElementById("chatHistory");
-        chatHistory.value += message + "\n";
-      };
-
-      socket.onclose = function(event) {
-        console.log("Disconnected from server");
-      };
-
-      socket.onerror = function(error) {
-        console.error("WebSocket error:", error);
-      };
-    }
-
-    function sendMessage() {
-      const messageInput = document.getElementById("messageInput");
-      const message = messageInput.value;
-      socket.send(message);
-      messageInput.value = "";
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cry9c Fan Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #messages { margin-top: 20px; border: 1px solid #ccc; padding: 10px; width: 300px; height: 150px; overflow-y: scroll; }
+        input[type="text"] { width: 220px; }
+        button { width: 75px; }
+    </style>
 </head>
-<body onload="init()">
-  <h1>Cry9c Fan  club Chat</h1>
-  <textarea id="chatHistory" rows="10" cols="50" readonly></textarea><br>
-  <input type="text" id="messageInput" placeholder="Enter message">
-  <button onclick="sendMessage()">Send</button>
+<body>
+    <h2>Cry9c Fan Club Chat</h2>
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+    <div id="messages"></div>
+
+    <script>
+        let socket = null;
+
+        function connectWebSocket() {
+            socket = new WebSocket("wss://cry9c.life/ws");
+
+            socket.onopen = function() {
+                addMessage("Connected to the server");
+            };
+
+            socket.onmessage = function(event) {
+                addMessage("From server: " + event.data);
+            };
+
+            socket.onerror = function(error) {
+                addMessage("WebSocket error: " + error.message);
+            };
+
+            socket.onclose = function(event) {
+                addMessage("Disconnected from the server");
+                if (!event.wasClean) {
+                    addMessage('Connection closed uncleanly');
+                }
+            };
+        }
+
+        function sendMessage() {
+            const message = document.getElementById("messageInput").value;
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                addMessage("Not connected to the server");
+                return;
+            }
+            socket.send(message);
+            addMessage("To server: " + message);
+            document.getElementById("messageInput").value = ''; // clear input after sending
+        }
+
+        function addMessage(message) {
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += message + '<br>';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // auto-scroll to latest message
+        }
+
+        // Connect to WebSocket when the page loads
+        window.onload = connectWebSocket;
+    </script>
 </body>
 </html>
