@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   caddy:
     image: caddy:2.4.6
@@ -11,6 +12,13 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+    restart: unless-stopped
+
+  go_server:
+    build: .
+    container_name: go_chat_server
+    ports:
+      - "8080:8080"
     restart: unless-stopped
 
 volumes:

@@ -2,6 +2,11 @@
     email doglover.fourtwenty@gmail.com
 }
 
-cry9c.online {
-    reverse_proxy server:8000
+cry9c.life {
+    root * /usr/share/caddy  # Path to your static files
+    file_server             # Serve static files
+
+    # Handle WebSocket connections
+    @websocket path /ws*  # Adjust path as needed for your WebSocket endpoint
+    reverse_proxy @websocket go_server:8080  # Point to the Go server, handling WebSocket
 }
