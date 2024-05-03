@@ -1,6 +1,6 @@
 module go_chat_server
 
-go 1.22.2
+go 1.18
 
 require (
 	github.com/gorilla/websocket v1.5.1 // direct
