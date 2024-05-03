@@ -13,6 +13,7 @@ RUN go mod download
 # Copy the source code into the container
 COPY . .
 
+# Copy the index.html file into the container
 COPY index.html .
 
 # Build the application. Disable CGO and target Linux
@@ -26,6 +27,9 @@ WORKDIR /root/
 
 # Copy the built executable from the builder stage to the production image
 COPY --from=builder /app/main .
+
+# Copy the index.html file from the builder stage to the production image
+COPY --from=builder /app/index.html .
 
 # Expose port 8080 for the application
 EXPOSE 8080
