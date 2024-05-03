@@ -1,79 +1,50 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"io"
 	"net/http"
 
-	"github.com/gorilla/websocket"
+	"golang.org/x/net/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		return true // Adjust the origin checking to suit your needs
-	},
+type Server struct {
+	conns map[*websocket.Conn]bool
 }
 
-// Client holds the WebSocket connection and the send channel
-type Client struct {
-	conn *websocket.Conn
-	send chan []byte
-}
-
-var clients = make(map[*Client]bool) // connected clients
-var broadcast = make(chan []byte)    // broadcast channel
-
-func main() {
-	http.HandleFunc("/ws", handleConnections)
-	go handleMessages()
-
-	log.Println("HTTP server starting on port :8080...")
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
+func NewServer() *Server {
+	return &Server{
+		conns: make(map[*websocket.Conn]bool),
 	}
 }
 
-func handleConnections(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer ws.Close()
+func (s *Server) handleWS(ws *websocket.Conn) {
+	fmt.Println("new incoming connection from client:", ws.RemoteAddr())
 
-	client := &Client{conn: ws, send: make(chan []byte)}
-	clients[client] = true
+	s.conns[ws] = true
 
+	s.readLoop(ws)
+}
+
+func (s *Server) readLoop(ws *websocket.Conn) {
+	buf := make([]byte, 1024)
 	for {
-		_, msg, err := ws.ReadMessage()
+		n, err := ws.Read(buf)
 		if err != nil {
-			log.Printf("error: %v", err)
-			delete(clients, client)
-			break
+			if err == io.EOF {
+				break
+			}
+			fmt.Println("read error:", err)
+			continue
 		}
-		broadcast <- msg
+		msg := buf[:n]
+		fmt.Println(string(msg))
+		ws.Write([]byte("thank you for the msg!!!"))
 	}
 }
+func main() {
 
-func handleMessages() {
-	for {
-		msg := <-broadcast
-		for client := range clients {
-			select {
-			case client.send <- msg:
-				// send the message
-				err := client.conn.WriteMessage(websocket.TextMessage, msg)
-				if err != nil {
-					log.Printf("error: %v", err)
-					client.conn.Close()
-					delete(clients, client)
-				}
-			default:
-				// failed to send
-				close(client.send)
-				delete(clients, client)
-			}
-		}
-	}
+	server := NewServer()
+	http.Handle("/ws", websocket.Handler(server.handleWS))
+	http.ListenAndServe(":8080", nil)
 }

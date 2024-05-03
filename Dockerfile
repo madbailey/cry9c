@@ -1,33 +1,34 @@
-# Use the official Golang image to create a build artifact.
-# This is a multi-stage build. In the first stage, we build the binary.
+# Start with the official Golang base image for the build stage
 FROM golang:1.18 as builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Copy go mod and sum files
+# Copy go mod and sum files to the container
 COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files do not change
 RUN go mod download
 
 # Copy the source code into the container
 COPY . .
 
-# Build the Go app
+# Build the application. Disable CGO and target Linux
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
-# Start a new stage from scratch
-FROM alpine:latest  
+# Start a new stage from scratch for the runtime
+FROM alpine:latest
 
+# Add ca-certificates in case you need HTTPS
 RUN apk --no-cache add ca-certificates
 
+# Set the working directory in the container
 WORKDIR /root/
 
-# Copy the Pre-built binary file from the previous stage
+# Copy the built executable from the builder stage to the production image
 COPY --from=builder /app/main .
 
-# Expose port 8080 to the outside world
+# Expose port 8080 for the application
 EXPOSE 8080
 
 # Command to run the executable
