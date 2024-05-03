@@ -10,9 +10,16 @@
 
     <script>
         var conn = new WebSocket('ws://localhost:8080/ws');
+        conn.onopen = function() {
+            console.log("Connection established!");
+        };
+        conn.onerror = function(error) {
+            console.log("Connection error:", error);
+        };
         conn.onmessage = function(e) {
             var messages = document.getElementById('chat');
             messages.innerHTML += '<div>' + e.data + '</div>';
+            console.log("Received message:", e.data);
         };
 
         function sendMessage() {
