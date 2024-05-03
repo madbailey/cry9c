@@ -31,8 +31,9 @@
                 addMessage("From server: " + event.data);
             };
 
-            socket.onerror = function(error) {
-                addMessage("WebSocket error: " + error.message);
+            socket.onerror = function(event) {
+                console.error("WebSocket error observed:", event);
+                addMessage("WebSocket error observed: " + JSON.stringify(event));
             };
 
             socket.onclose = function(event) {
