@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"golang.org/x/net/websocket"
 )
@@ -19,10 +20,8 @@ func NewServer() *Server {
 }
 
 func (s *Server) handleWS(ws *websocket.Conn) {
-	fmt.Println("new incoming connection from client:", ws.RemoteAddr())
-
+	fmt.Println("New connection:", ws.RemoteAddr())
 	s.conns[ws] = true
-
 	s.readLoop(ws)
 }
 
@@ -32,19 +31,31 @@ func (s *Server) readLoop(ws *websocket.Conn) {
 		n, err := ws.Read(buf)
 		if err != nil {
 			if err == io.EOF {
+				fmt.Println("Connection closed:", ws.RemoteAddr())
 				break
 			}
-			fmt.Println("read error:", err)
+			fmt.Println("Read error:", err)
 			continue
 		}
-		msg := buf[:n]
-		fmt.Println(string(msg))
-		ws.Write([]byte("thank you for the msg!!!"))
-	}
-}
-func main() {
 
+		msg := buf[:n]
+		fmt.Printf("Received message from %v: %s\n", ws.RemoteAddr(), msg)
+		responseMsg := "Thank you for your message!"
+		ws.Write([]byte(responseMsg))
+		fmt.Printf("Sent response to %v: %s\n", ws.RemoteAddr(), responseMsg)
+	}
+
+	// Remove the connection from the map
+	delete(s.conns, ws)
+	fmt.Println("Removed connection:", ws.RemoteAddr())
+}
+
+func main() {
 	server := NewServer()
 	http.Handle("/ws", websocket.Handler(server.handleWS))
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Server starting on http://localhost:8080...")
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Server failed: %v\n", err)
+	}
 }
