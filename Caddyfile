@@ -3,6 +3,8 @@
 }
 
 cry9c.life {
-    reverse_proxy / go_server:8080
+    reverse_proxy / go_server:8080 {
+        websocket
+    }
 }
 
