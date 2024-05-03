@@ -1,41 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cry9c Fan Club Chat</title>
+<meta charset="UTF-8">
+<title>Cry9c Fan Chat</title>
+<style>
+    body { font-family: Arial, sans-serif; }
+    #chat { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 5px; }
+    #message { width: 70%; }
+</style>
 </head>
 <body>
-    <div id="chat"></div>
-    <input type="text" id="messageInput" placeholder="Enter message...">
-    <button onclick="sendMessage()">Send</button>
+<div id="chat"></div>
+<input id="message" type="text" placeholder="Enter message" autofocus>
+<button id="send">Send</button>
 
-    <script>
-        let socket = new WebSocket('ws://localhost:8080/ws');  // Ensure the URL is correct!
-    
-        socket.onopen = function() {
-            console.log("Connection established!");
-            socket.send('Hello from the client!');
-        };
-    
-        socket.onmessage = (event) => {
-            console.log("Received from the server:", event.data);
-            let chat = document.getElementById('chat');
-            chat.innerHTML += event.data + '<br>';
-        };
-    
-        socket.onclose = function(event) {
-            console.log("Connection closed:", event);
-        };
-    
-        socket.onerror = function(error) {
-            console.log("WebSocket Error:", error);
-        };
-    
-        function sendMessage() {
-            let message = document.getElementById('messageInput').value;
-            socket.send(message);
-            document.getElementById('messageInput').value = ''; // clear input after sending
-        }
-    </script>
-    
+<script>
+    const chat = document.getElementById('chat');
+    const messageInput = document.getElementById('message');
+
+    const ws = new WebSocket('ws://localhost:8080/ws');
+
+    ws.onopen = function() {
+        chat.innerHTML += '<p><em>Connected!</em></p>';
+    };
+
+    ws.onmessage = function(event) {
+        chat.innerHTML += '<p>Server: ' + event.data + '</p>';
+        chat.scrollTop = chat.scrollHeight; // Auto-scroll to latest message
+    };
+
+    ws.onerror = function() {
+        chat.innerHTML += '<p><em>Error connecting to server.</em></p>';
+    };
+
+    ws.onclose = function() {
+        chat.innerHTML += '<p><em>Disconnected from server.</em></p>';
+    };
+
+    document.getElementById('send').onclick = function() {
+        if (messageInput.value.trim() === '') return;
+        ws.send(messageInput.value);
+        chat.innerHTML += '<p>You: ' + messageInput.value + '</p>';
+        messageInput.value = '';
+        chat.scrollTop = chat.scrollHeight; // Auto-scroll to latest message
+    };
+</script>
 </body>
 </html>
