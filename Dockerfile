@@ -19,9 +19,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 # Start a new stage from scratch for the runtime
 FROM alpine:latest
 
-# Add ca-certificates in case you need HTTPS
-RUN apk --no-cache add ca-certificates
-
 # Set the working directory in the container
 WORKDIR /root/
 

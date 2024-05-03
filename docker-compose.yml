@@ -14,12 +14,19 @@ services:
       - caddy_config:/config
     restart: unless-stopped
 
+  services:
   go_server:
     build: .
     container_name: go_chat_server
     ports:
       - "8080:8080"
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
 
 volumes:
   caddy_data:
