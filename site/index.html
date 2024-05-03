@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple Chat Room</title>
+    <title>Cry9c Fan Club Chat</title>
 </head>
 <body>
     <div id="chat"></div>
@@ -9,24 +9,33 @@
     <button onclick="sendMessage()">Send</button>
 
     <script>
-        var conn = new WebSocket('ws://localhost:8080/ws');
-        conn.onopen = function() {
+        let socket = new WebSocket('ws://localhost:8080/ws');  // Ensure the URL is correct!
+    
+        socket.onopen = function() {
             console.log("Connection established!");
+            socket.send('Hello from the client!');
         };
-        conn.onerror = function(error) {
-            console.log("Connection error:", error);
+    
+        socket.onmessage = (event) => {
+            console.log("Received from the server:", event.data);
+            let chat = document.getElementById('chat');
+            chat.innerHTML += event.data + '<br>';
         };
-        conn.onmessage = function(e) {
-            var messages = document.getElementById('chat');
-            messages.innerHTML += '<div>' + e.data + '</div>';
-            console.log("Received message:", e.data);
+    
+        socket.onclose = function(event) {
+            console.log("Connection closed:", event);
         };
-
+    
+        socket.onerror = function(error) {
+            console.log("WebSocket Error:", error);
+        };
+    
         function sendMessage() {
-            var input = document.getElementById('messageInput');
-            conn.send(input.value);
-            input.value = '';
+            let message = document.getElementById('messageInput').value;
+            socket.send(message);
+            document.getElementById('messageInput').value = ''; // clear input after sending
         }
     </script>
+    
 </body>
 </html>
