@@ -14,7 +14,6 @@ services:
       - caddy_config:/config
     restart: unless-stopped
 
-  services:
   go_server:
     build: .
     container_name: go_chat_server
