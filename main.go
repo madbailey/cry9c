@@ -20,9 +20,7 @@ func NewServer() *Server {
 
 func (s *Server) handleWS(ws *websocket.Conn) {
 	fmt.Println("new incoming connection from client:", ws.RemoteAddr())
-
 	s.conns[ws] = true
-
 	s.readLoop(ws)
 }
 
@@ -38,7 +36,6 @@ func (s *Server) readLoop(ws *websocket.Conn) {
 			continue
 		}
 		msg := buf[:n]
-
 		s.broadcast(msg)
 	}
 }
@@ -55,6 +52,13 @@ func (s *Server) broadcast(b []byte) {
 
 func main() {
 	server := NewServer()
+
 	http.Handle("/ws", websocket.Handler(server.handleWS))
+
+	// Serve the HTML file
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "site/index.html")
+	})
+
 	http.ListenAndServe(":8080", nil)
 }
