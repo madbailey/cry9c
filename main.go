@@ -57,7 +57,7 @@ func main() {
 
 	// Serve the HTML file
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "site/index.html")
+		http.ServeFile(w, r, "index.html")
 	})
 
 	http.ListenAndServe(":8080", nil)
