@@ -16,7 +16,7 @@ services:
 
   go_server:
     build: .
-    container_name: go_chat_server
+    container_name: go_server
     ports:
       - "8080:8080"
     restart: unless-stopped
