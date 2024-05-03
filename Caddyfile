@@ -3,9 +3,5 @@
 }
 
 cry9c.life {
-    root * /usr/share/caddy  # Path to your static files
-    file_server             # Serve static files
-
-    @websocket path /ws*  # Match all WebSocket requests
-    reverse_proxy @websocket go_server:8080  # Reverse proxy the WebSocket requests
+    reverse_proxy go_server : 8080
 }
