@@ -13,6 +13,8 @@ RUN go mod download
 # Copy the source code into the container
 COPY . .
 
+COPY index.html .
+
 # Build the application. Disable CGO and target Linux
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
