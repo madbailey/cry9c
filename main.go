@@ -108,7 +108,7 @@ func serveImage(w http.ResponseWriter, r *http.Request) {
 
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Fatal(err) // Consider using http.Error for production
+		http.Error(w, "Failed to read", http.StatusInternalServerError) // Consider using http.Error for production
 	}
 
 	img, err := png.Decode(bytes.NewReader(data))
