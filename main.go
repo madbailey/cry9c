@@ -14,6 +14,7 @@ import (
 	"sort"
 	"sync"
 
+	"golang.org/x/image/draw"
 	"golang.org/x/net/websocket"
 )
 
@@ -73,6 +74,12 @@ func (s *Server) broadcast(b []byte) {
 	}
 }
 
+func resizeImage(img image.Image, width, height int) image.Image {
+	newImg := image.NewRGBA(image.Rect(0, 0, width, height))
+	draw.ApproxBiLinear.Scale(newImg, newImg.Bounds(), img, img.Bounds(), draw.Over, nil)
+	return newImg
+}
+
 func sortPixels(img image.Image) *image.RGBA {
 	bounds := img.Bounds()
 	sortedImage := image.NewRGBA(bounds)
@@ -130,9 +137,10 @@ func serveImage(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed to decode image: %v", err)
 		return
 	}
+	resizedImg := resizeImage(img, 500, 500) // Resize the image to 500x500
 
 	// Apply pixel sorting here
-	sortedImg := sortPixels(img)
+	sortedImg := sortPixels(resizedImg)
 
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, sortedImg); err != nil {
