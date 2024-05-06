@@ -72,16 +72,17 @@ func (s *Server) broadcast(b []byte) {
 	}
 }
 
-// sortPixels sorts the pixels of an image row by row based on the brightness.
 func sortPixels(img image.Image) *image.RGBA {
 	bounds := img.Bounds()
 	sortedImage := image.NewRGBA(bounds)
+	width, height := bounds.Dx(), bounds.Dy()
+	row := make([]color.Color, width)
 
-	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
-		var row []color.Color
-		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			row = append(row, img.At(x, y))
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			row[x] = img.At(bounds.Min.X+x, bounds.Min.Y+y)
 		}
+
 		sort.Slice(row, func(i, j int) bool {
 			r, g, b, _ := row[i].RGBA()
 			r2, g2, b2, _ := row[j].RGBA()
@@ -89,8 +90,9 @@ func sortPixels(img image.Image) *image.RGBA {
 			brightness2 := r2 + g2 + b2
 			return brightness1 < brightness2
 		})
+
 		for x, clr := range row {
-			sortedImage.Set(bounds.Min.X+x, y, clr)
+			sortedImage.Set(bounds.Min.X+x, bounds.Min.Y+y, clr)
 		}
 	}
 
