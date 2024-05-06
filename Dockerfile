@@ -17,6 +17,8 @@ COPY . .
 COPY index.html .
 
 COPY dog.png .
+
+RUN chmod 644 dog.png
 # Build the application. Disable CGO and target Linux
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
