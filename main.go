@@ -8,7 +8,6 @@ import (
 	"image/png"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"sort"
@@ -102,7 +101,7 @@ func serveImage(w http.ResponseWriter, r *http.Request) {
 	filePath := "dog.png"
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Fatal(err) // Consider using http.Error for production
+		http.Error(w, "Failed to open file", http.StatusInternalServerError)
 	}
 	defer file.Close()
 
