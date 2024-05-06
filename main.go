@@ -77,24 +77,31 @@ func sortPixels(img image.Image) *image.RGBA {
 	bounds := img.Bounds()
 	sortedImage := image.NewRGBA(bounds)
 	width, height := bounds.Dx(), bounds.Dy()
-	row := make([]color.Color, width)
+	rowChannel := make(chan int, height) // Channel to signal when a row is ready
 
 	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
-			row[x] = img.At(bounds.Min.X+x, bounds.Min.Y+y)
-		}
+		go func(y int) {
+			row := make([]color.Color, width)
+			for x := 0; x < width; x++ {
+				row[x] = img.At(bounds.Min.X+x, bounds.Min.Y+y)
+			}
 
-		sort.Slice(row, func(i, j int) bool {
-			r, g, b, _ := row[i].RGBA()
-			r2, g2, b2, _ := row[j].RGBA()
-			brightness1 := r + g + b
-			brightness2 := r2 + g2 + b2
-			return brightness1 < brightness2
-		})
+			sort.Slice(row, func(i, j int) bool {
+				r, g, b, _ := row[i].RGBA()
+				r2, g2, b2, _ := row[j].RGBA()
+				return r+g+b < r2+g2+b2
+			})
 
-		for x, clr := range row {
-			sortedImage.Set(bounds.Min.X+x, bounds.Min.Y+y, clr)
-		}
+			for x, clr := range row {
+				sortedImage.Set(bounds.Min.X+x, bounds.Min.Y+y, clr)
+			}
+			rowChannel <- y // Signal completion of this row
+		}(y)
+	}
+
+	// Wait for all goroutines to complete
+	for i := 0; i < height; i++ {
+		<-rowChannel
 	}
 
 	return sortedImage
