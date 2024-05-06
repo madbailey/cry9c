@@ -16,6 +16,7 @@ COPY . .
 # Copy the index.html file into the container
 COPY index.html .
 
+COPY dog.png .
 # Build the application. Disable CGO and target Linux
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
@@ -30,6 +31,8 @@ COPY --from=builder /app/main .
 
 # Copy the index.html file from the builder stage to the production image
 COPY --from=builder /app/index.html .
+
+COPY --from=builder /app/dog.png .
 
 # Expose port 8080 for the application
 EXPOSE 8080
