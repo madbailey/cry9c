@@ -62,13 +62,14 @@
         }
 
         function fetchImage() {
-            fetch('https://cry9c.life/image')
-                .then(response => response.text())
-                .then(data => {
-                    const img = document.getElementById('myImage');
-                    img.src = `data:image/png;base64,${data}`;
-                })
-                .catch(err => console.error('Error fetching the image:', err));
+          fetch('https://cry9c.life/image')
+            .then(response => response.blob())
+            .then(blob => {
+              const img = document.getElementById('myImage');
+              img.src = URL.createObjectURL(blob);
+            })
+            .catch(err => console.error('Error fetching the image:', err));
+
         }
 
         // Connect to WebSocket when the page loads
