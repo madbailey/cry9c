@@ -16,51 +16,63 @@
     <input type="text" id="messageInput" placeholder="Type a message...">
     <button onclick="sendMessage()">Send</button>
     <div id="messages"></div>
+    <img id="myImage" src="" alt="Processed Image">
 
     <script>
-      let socket = null;
-  
-      function connectWebSocket() {
-          socket = new WebSocket("wss://cry9c.life/ws");
-  
-          socket.onopen = function() {
-              addMessage("Connected to the server");
-          };
-  
-          socket.onmessage = function(event) {
-              addMessage("From server: " + event.data);
-          };
-  
-          socket.onerror = function(error) {
-              addMessage("WebSocket error: " + error.message);
-          };
-  
-          socket.onclose = function(event) {
-              addMessage("Disconnected from the server");
-              if (!event.wasClean) {
-                  addMessage('Connection closed uncleanly');
-              }
-          };
-      }
-  
-      function sendMessage() {
-          const message = document.getElementById("messageInput").value;
-          if (!socket || socket.readyState !== WebSocket.OPEN) {
-              addMessage("Not connected to the server");
-              return;
-          }
-          socket.send(message);
-          document.getElementById("messageInput").value = ''; // clear input after sending
-      }
-  
-      function addMessage(message) {
-          const messagesDiv = document.getElementById("messages");
-          messagesDiv.innerHTML += message + '<br>';
-          messagesDiv.scrollTop = messagesDiv.scrollHeight; // auto-scroll to latest message
-      }
-  
-      // Connect to WebSocket when the page loads
-      window.onload = connectWebSocket;
-  </script>
+        let socket = null;
+
+        function connectWebSocket() {
+            socket = new WebSocket("wss://cry9c.life/ws");
+
+            socket.onopen = function() {
+                addMessage("Connected to the server");
+                fetchImage(); // Fetch image after successful connection
+            };
+
+            socket.onmessage = function(event) {
+                addMessage("From server: " + event.data);
+            };
+
+            socket.onerror = function(error) {
+                addMessage("WebSocket error: " + error.toString());
+            };
+
+            socket.onclose = function(event) {
+                addMessage("Disconnected from the server");
+                if (!event.wasClean) {
+                    addMessage('Connection closed uncleanly');
+                }
+            };
+        }
+
+        function sendMessage() {
+            const message = document.getElementById("messageInput").value;
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                addMessage("Not connected to the server");
+                return;
+            }
+            socket.send(message);
+            document.getElementById("messageInput").value = ''; // Clear input after sending
+        }
+
+        function addMessage(message) {
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += message + '<br>';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
+        }
+
+        function fetchImage() {
+            fetch('http://localhost:8080/image')
+                .then(response => response.text())
+                .then(data => {
+                    const img = document.getElementById('myImage');
+                    img.src = `data:image/png;base64,${data}`;
+                })
+                .catch(err => console.error('Error fetching the image:', err));
+        }
+
+        // Connect to WebSocket when the page loads
+        window.onload = connectWebSocket;
+    </script>
 </body>
 </html>
