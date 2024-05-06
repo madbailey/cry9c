@@ -8,6 +8,7 @@ import (
 	"image/png"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"sort"
@@ -104,17 +105,22 @@ func serveImage(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		http.Error(w, "Failed to open file", http.StatusInternalServerError)
+		log.Printf("Failed to open file: %v", err)
+		return
 	}
 	defer file.Close()
 
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
-		http.Error(w, "Failed to read", http.StatusInternalServerError) // Consider using http.Error for production
+		http.Error(w, "Failed to read file", http.StatusInternalServerError)
+		log.Printf("Failed to read file: %v", err)
+		return
 	}
 
 	img, err := png.Decode(bytes.NewReader(data))
 	if err != nil {
 		http.Error(w, "Failed to decode image", http.StatusInternalServerError)
+		log.Printf("Failed to decode image: %v", err)
 		return
 	}
 
@@ -124,6 +130,7 @@ func serveImage(w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, sortedImg); err != nil {
 		http.Error(w, "Failed to encode image", http.StatusInternalServerError)
+		log.Printf("Failed to encode image: %v", err)
 		return
 	}
 
