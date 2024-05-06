@@ -72,7 +72,7 @@ func (s *Server) broadcast(b []byte) {
 }
 
 func serveImage(w http.ResponseWriter, r *http.Request) {
-	filePath := "epd_butmap_.bin"
+	filePath := "epd_bitmap_.bin"
 	file, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal(err)
