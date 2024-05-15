@@ -2,23 +2,40 @@
   font-family: Vercetti-Regular;
   src: url(../resources/Vercetti-Regular.woff2) format('woff2');
 }
+@font-face {
+  font-family: Romance-Fatal;
+  src: url(../resources/RomanceFatalLcdRegular-BAB8.ttf) format('truetype');
+}
+@font-face {
+  font-family: argh;
+  src: url(../resources/AnticDidone-Regular.otf) format(truetype);
+}
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 body {
-    margin: 0;
     font-family: Vercetti-Regular;
     background: linear-gradient(to bottom, #000428, #004e92);
     color: white;
 }
 .container {
     display: flex;
+    height: 100vh;
 }
 .main-content {
-    width: 85%;
+    width: 66.6%; /* 2/3 of the screen */
     padding: 20px;
+    position: relative;
+}
+
+.side-bar {
+    width: 33.3%; /* 1/3 of the screen */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 html {
@@ -26,59 +43,126 @@ html {
 }
 html, body {
     height: 100%;
-    margin: 0;
     background-image: linear-gradient(360deg, 
       rgb(36, 53, 121) 0%,
       rgb(18, 26, 59) 50%
       , #000000 100%);
     background-size: cover;
 } 
-.banner {
-    margin: auto 0;
-    bottom: 50px;
-    top: 75%;
-    position: absolute;
-    color: white;
-    text-align: center;
-    font-size: 3rem;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
+#main-header {
+  display: flex;
+  align-items: right;
+  padding: 20px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  top: 0;
+  
 }
-#albumcover {
-  width: 600px;
-  margin: 0 auto;
-  left: 350px;
-  top: 250px;
+
+#symbol {
+  font-size: 2.5rem; 
+  margin-right: 10px; 
+  color: #FF69B4; 
+  text-shadow: 0 0 10px #FF69B4, /* Adjust the spread */
+               0 0 20px #FF69B4,
+               0 0 30px #FF69B4,
+               0 0 40px #FF69B4,
+               0 0 50px #FF69B4;
+}
+
+#main-header h1 {
+  font-family: 'Lugrasimo', sans-serif; 
+  font-size: 2.5rem; 
+  color: #FF69B4; 
+  margin: 0; 
+}
+
+
+.banner {
+    width: 100%;
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+    color: white;
     position: absolute;
+    top: 75%;
+    text-align: center;
+    height: 20%;
+    
+}
+.banner #banner-normal {
+  font-family: 'argh', sans-serif;
+  font-size: 2rem;
+    font-weight: 300; /* Use a lower number for thinner text */
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.thin-line {
+    border: 2px solid #9400D3;
+    border-radius: 10px;
+    width: 75vw;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner #fancy-text {
+    font-size: 5rem;
+    font-weight: 400;
+    font-family: 'Romance-Fatal', serif;
+}
+
+.order-button {
+    background-color: #FF69B4;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#albumcover {
+    width: 25%;
     object-fit: cover;
+    position: absolute;
+    top: 25%;
+    left: 30%;
     border-radius: 2%;
     box-shadow: 0 0 10px #9400D3, 0 0 20px #9400D3, 0 0 30px #9400D3, 0 0 40px #9400D3;
-    transform-style: preserve-3d;
     transition: transform 0.1s;
     animation: rotate 10s infinite linear;
     cursor: grab;
-  }
-  #albumcover:active {
+}
+
+#albumcover:active {
     cursor: grabbing;
 }
 
-  @keyframes rotate {
+@keyframes rotate {
     0% {
-      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
     }
     25% {
-      transform: perspective(1000px) rotateX(-20deg) rotateY(20deg);
+        transform: perspective(1000px) rotateX(-20deg) rotateY(20deg);
     }
     50% {
-      transform: perspective(1000px) rotateX(0deg) rotateY(40deg);
+        transform: perspective(1000px) rotateX(0deg) rotateY(40deg);
     }
     75% {
-      transform: perspective(1000px) rotateX(20deg) rotateY(20deg);
+        transform: perspective(1000px) rotateX(20deg) rotateY(20deg);
     }
     100% {
-      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
     }
-  }
+}
 
 #navbar {
     position: fixed;
@@ -92,11 +176,13 @@ html, body {
     height: 50%;
     width: 2%;
     transform: translateY(-50%);
-    border: 3px solid #9400D3; 
-    border-radius: 20px; 
+    border: 3px solid #9400D3;
+    border-radius: 20px;
     font-size: 1.5rem;
     font-weight: bold;
+    z-index: 99;
 }
+
 #navbar a {
     writing-mode: vertical-rl;
     text-orientation: mixed;
@@ -104,60 +190,60 @@ html, body {
     text-decoration: none;
     margin: 10px 0;
 }
+
 #navbar a:hover {
     color: #9400D3;
 }
+
 #chat-room {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  border: 2px solid #9400D3;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #9400D3, 0 0 20px #9400D3, 0 0 30px #9400D3, 0 0 40px #9400D3;
+    margin-top: 20px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border: 2px solid #9400D3;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #9400D3, 0 0 20px #9400D3, 0 0 30px #9400D3, 0 0 40px #9400D3;
 }
 
 #chat-room h2, #chat-room h3 {
-  margin: 5px 0;
-  color: white;
+    margin: 5px 0;
+    color: white;
 }
 
 #messageInput {
-  width: calc(100% - 22px);
-  padding: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #9400D3;
-  border-radius: 5px;
-  background-color: #222;
-  color: white;
+    width: calc(100% - 22px);
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #9400D3;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
 }
 
 #messageInput:focus {
-  outline: none;
-  border-color: #007BFF;
+    outline: none;
+    border-color: #007BFF;
 }
 
 button {
-  padding: 5px 10px;
-  background-color: #9400D3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    padding: 5px 10px;
+    background-color: #9400D3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
-  background-color: #5a009e;
+    background-color: #5a009e;
 }
 
 #messages {
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 10px;
-  padding: 5px;
-  border-top: 1px solid #9400D3;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 5px;
+    border-top: 1px solid #9400D3;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
 }

@@ -14,6 +14,10 @@
 </head>
 
 <body>
+    <header id="main-header">
+        <div id="symbol">ཐིཋྀ</div>
+        <h1>CRY9C</h1>
+    </header>
     <div class="container">
         <div id="navbar">
             <a href="./index.html">Home</a>
@@ -22,34 +26,36 @@
             <a href="./contact.html">Contact</a>
             <a href="https://timeline.coldplay.com/" target="_blank">Timeline</a>
         </div>
-        <header id="main-header">
-            <h1>CRY9C</h1>
-        </header>
         <div class="main-content">
             <div class="banner">
-                <h1>The new ep</h1>
-                <h1>SECRETS ATTENTION</h1>
-                <h2>is out now</h2>
-
+                <div class="thin-line">
+                    <h1>The new ep</h1>
+                    <h1 id="fancy-text">SECRETS ATTENTION</h1>
+                    <h2>is out now</h2>
+                    <button class="order-button">ORDER</button>
+                </div>
             </div>
             <div class="album">
-                <img src="../resources/albumcover.jpg"  id="albumcover" alt="SECRETS ATTENTION">
+                <img src="../resources/albumcover.jpg" id="albumcover" alt="SECRETS ATTENTION">
             </div>
+        </div>
+        <div class="side-bar">
             <div class="news">
                 <h2>ATTENTION to the <details>details</details></h2>
                 <p>CONFESSIONS</p>
                 <h2>2024 EUROPEAN TOUR</h2>
                 <p>18-FEB-2024</p>
             </div>
-        </div>
-        <div id="chat-room">
-            <h2>Cry9c Fan Club Chat</h2>
-            <h3>Chat Room</h3>
-            <input type="text" id="messageInput" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
-            <div id="messages"></div>
+            <div id="chat-room">
+                <h2>Cry9c Fan Club Chat</h2>
+                <h3>Chat Room</h3>
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button onclick="sendMessage()">Send</button>
+                <div id="messages"></div>
+            </div>
         </div>
     </div>
+
 
     <script src="../src/script.js"></script>
 </body>
