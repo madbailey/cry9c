@@ -1,0 +1,163 @@
+@font-face {
+  font-family: Vercetti-Regular;
+  src: url(../resources/Vercetti-Regular.woff2) format('woff2');
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: Vercetti-Regular;
+    background: linear-gradient(to bottom, #000428, #004e92);
+    color: white;
+}
+.container {
+    display: flex;
+}
+.main-content {
+    width: 85%;
+    padding: 20px;
+}
+
+html {
+    font-size: 62.5%;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    background-image: linear-gradient(360deg, 
+      rgb(36, 53, 121) 0%,
+      rgb(18, 26, 59) 50%
+      , #000000 100%);
+    background-size: cover;
+} 
+.banner {
+    margin: auto 0;
+    bottom: 50px;
+    top: 75%;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 3rem;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+}
+#albumcover {
+  width: 600px;
+  margin: 0 auto;
+  left: 350px;
+  top: 250px;
+    position: absolute;
+    object-fit: cover;
+    border-radius: 2%;
+    box-shadow: 0 0 10px #9400D3, 0 0 20px #9400D3, 0 0 30px #9400D3, 0 0 40px #9400D3;
+    transform-style: preserve-3d;
+    transition: transform 0.1s;
+    animation: rotate 10s infinite linear;
+    cursor: grab;
+  }
+  #albumcover:active {
+    cursor: grabbing;
+}
+
+  @keyframes rotate {
+    0% {
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    }
+    25% {
+      transform: perspective(1000px) rotateX(-20deg) rotateY(20deg);
+    }
+    50% {
+      transform: perspective(1000px) rotateX(0deg) rotateY(40deg);
+    }
+    75% {
+      transform: perspective(1000px) rotateX(20deg) rotateY(20deg);
+    }
+    100% {
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    }
+  }
+
+#navbar {
+    position: fixed;
+    left: 0;
+    top: 30%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    width: 2%;
+    transform: translateY(-50%);
+    border: 3px solid #9400D3; 
+    border-radius: 20px; 
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+#navbar a {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+}
+#navbar a:hover {
+    color: #9400D3;
+}
+#chat-room {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border: 2px solid #9400D3;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #9400D3, 0 0 20px #9400D3, 0 0 30px #9400D3, 0 0 40px #9400D3;
+}
+
+#chat-room h2, #chat-room h3 {
+  margin: 5px 0;
+  color: white;
+}
+
+#messageInput {
+  width: calc(100% - 22px);
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #9400D3;
+  border-radius: 5px;
+  background-color: #222;
+  color: white;
+}
+
+#messageInput:focus {
+  outline: none;
+  border-color: #007BFF;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #9400D3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5a009e;
+}
+
+#messages {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding: 5px;
+  border-top: 1px solid #9400D3;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}

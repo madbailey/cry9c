@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../styles/style-about.css">
+    <title>About Us</title>
+</head>
+<body>
+    <section>
+        <div class="pattern">
+            <div class="face face1"></div>
+            <div class="face face2"></div>
+        </div>
+    </section>
+    <section id="about-content">
+        <div class="bio">
+            <h2>About Cry9c</h2>
+<p>Cry9c is Niko, Florence, and Rashid. They live in West Philadelphia. They have been making music for a little while, I'm not sure how long. Maybe a year? Their music is a unique blend of various genres, creating a sound that is truly their own. They draw inspiration from their surroundings, experiences, and the diverse culture of their hometown.
+They have a new album out called "Secrets Attention". This album has been a labor of love for them, with each track carefully crafted to take the listener on a journey. The album features a mix of upbeat tracks and mellow tunes, showcasing their versatility as artists. The title, "Secrets Attention", reflects the themes of introspection, discovery, and the balance between revealing and concealing one's true self.
+In addition to their music, Cry9c is known for their energetic live performances. They have played at various local venues, captivating audiences with their dynamic stage presence and engaging performances. Their passion for music is evident in every note they play, and their connection with the audience is palpable.
+Outside of music, the members of Cry9c are involved in their community. They often participate in local events and collaborate with other artists to promote the arts in West Philadelphia. They believe in the power of music to bring people together and are committed to making a positive impact through their work.
+The future looks bright for Cry9c, with plans to release more music, perform at larger venues, and reach a wider audience. They are dedicated to honing their craft and continuing to evolve as artists. Stay tuned for more exciting projects and performances from Cry9c, as they continue to share their passion for music with the world.</p>
+        </div>
+    </section>
+    <section id="go-back">
+        <a href="#" id="first-back-link">Take me back</a>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const goBackSection = document.getElementById('go-back');
+            let buttonCount = 5;
+            let currentButtonSize = 16;
+
+            function createButton(size, isFinal) {
+                const button = document.createElement('a');
+                button.style.fontSize = `${size}px`;
+                button.textContent = 'Take me back';
+                button.href = isFinal ? 'index.html' : '#';
+                button.classList.add('back-button');
+                button.addEventListener('click', (e) => {
+                    if (!isFinal) {
+                        e.preventDefault();
+                        createButton(size + 8, buttonCount === 1);
+                        buttonCount--;
+                    }
+                });
+                goBackSection.appendChild(button);
+            }
+
+            document.getElementById('first-back-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('first-back-link').style.display = 'none';
+                createButton(currentButtonSize, false);
+            });
+        });
+    </script>
+</body>
+</html>

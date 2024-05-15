@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.pattern {
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    animation: animateBG 10s ease-in-out infinite;
+}
+@keyframes animateBG
+{
+    0%, 100%
+    {
+        transform: scale(1.6) rotate(-15deg);
+    }
+    50%
+    {
+        transform: scale(1.6) rotate(15deg);
+    }
+}
+.pattern .face {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    background: url(../resources/check.jpg);
+    background-size: 100px 100px;
+    animation: animate 1s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+.pattern .face.face2 {
+    height: 100vh;
+    transform-origin: top;
+    transform: rotateX(70deg);
+}
+
+.pattern .face1:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 125px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.5), transparent);
+}
+
+.pattern .face2:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 125px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.5), transparent);
+}
+
+#about-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 50vh;
+    width: 50vw;
+    transform: translate(-50%, -50%);
+    background: rgba(70, 64, 64, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-width: 80%;
+    text-align: center;
+}
+
+#about-content .bio h2 {
+    margin-bottom: 20px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 103px;
+    color: white;
+}
+
+#about-content .bio p {
+    background: rgba(206, 199, 199, 0.253);
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+}
+#go-back {
+    position: absolute;
+    top: 80%;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+#go-back a {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background: rgba(121, 117, 117, 0.1);
+    border-radius: 5px;
+    font-size: 24px;
+    text-decoration: none;
+    color: #1b1a47;
+    transition: background 0.3s, font-size 0.3s;
+}
+
+#go-back a:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .pattern .face {
+        background-size: 75px 75px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pattern .face {
+        background-size: 50px 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pattern .face {
+        height: 40vh;
+        background-size: 40px 40px;
+    }
+    
+    .pattern .face.face2 {
+        height: 80vh;
+        transform: rotateX(60deg);
+    }
+    
+    .pattern .face1:before,
+    .pattern .face2:before {
+        height: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .pattern .face {
+        height: 35vh;
+        background-size: 30px 30px;
+    }
+    
+    .pattern .face.face2 {
+        height: 70vh;
+        transform: rotateX(50deg);
+    }
+    
+    .pattern .face1:before,
+    .pattern .face2:before {
+        height: 75px;
+    }
+}

@@ -13,12 +13,15 @@ RUN go mod download
 # Copy the source code into the container
 COPY . .
 
-# Copy the index.html file into the container
-COPY index.html .
+# Copy the resources into the container
+COPY resources/ ./resources/
 
-COPY dog.png .
+# Copy the site into the container
+COPY site/ ./site/
 
-RUN chmod 644 dog.png
+# Copy the styles into the container
+COPY styles/ ./styles/
+
 # Build the application. Disable CGO and target Linux
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
@@ -31,10 +34,14 @@ WORKDIR /root/
 # Copy the built executable from the builder stage to the production image
 COPY --from=builder /app/main .
 
-# Copy the index.html file from the builder stage to the production image
-COPY --from=builder /app/index.html .
+# Copy the resources from the builder stage to the production image
+COPY --from=builder /app/resources/ ./resources/
 
-COPY --from=builder /app/dog.png .
+# Copy the site from the builder stage to the production image
+COPY --from=builder /app/site/ ./site/
+
+# Copy the styles from the builder stage to the production image
+COPY --from=builder /app/styles/ ./styles/
 
 # Expose port 8080 for the application
 EXPOSE 8080

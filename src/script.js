@@ -1,25 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cry9c Fan Chat</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        #messages { margin-top: 20px; border: 1px solid #ccc; padding: 10px; width: 300px; height: 150px; overflow-y: scroll; }
-        input[type="text"] { width: 220px; }
-        button { width: 75px; }
-    </style>
-</head>
-<body>
-    <h2>Cry9c Fan Club Chat</h2>
-    <input type="text" id="messageInput" placeholder="Type a message...">
-    <button onclick="sendMessage()">Send</button>
-    <div id="messages"></div>
-    <img id="myImage" src="" alt="Processed Image">
-
-    <script>
-        let socket = null;
+let socket = null;
 
         function connectWebSocket() {
             socket = new WebSocket("wss://cry9c.life/ws");
@@ -61,19 +40,5 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to latest message
         }
 
-        function fetchImage() {
-          fetch('https://cry9c.life/image')
-            .then(response => response.blob())
-            .then(blob => {
-              const img = document.getElementById('myImage');
-              img.src = URL.createObjectURL(blob);
-            })
-            .catch(err => console.error('Error fetching the image:', err));
-
-        }
-
         // Connect to WebSocket when the page loads
         window.onload = connectWebSocket;
-    </script>
-</body>
-</html>
