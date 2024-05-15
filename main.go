@@ -71,7 +71,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./site/index.html")
 	})
-	http.HandleFunc("/about.html", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./site/about.html")
 	})
 	http.Handle("/styles/", http.StripPrefix("/styles/", http.FileServer(http.Dir("./styles"))))
