@@ -74,6 +74,9 @@ func main() {
 	http.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./site/about.html")
 	})
+	http.HandleFunc("/triangle", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./site/triangle.html")
+	})
 	http.Handle("/styles/", http.StripPrefix("/styles/", http.FileServer(http.Dir("./styles"))))
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("./resources"))))
 
